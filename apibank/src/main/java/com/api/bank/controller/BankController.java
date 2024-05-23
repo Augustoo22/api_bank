@@ -1,8 +1,7 @@
 package com.api.bank.controller;
 
-
-import com.api.bank.entity.CertificationRule;
-import com.api.bank.repository.CertificationRuleRepository;
+import com.api.bank.entity.BankEntityUser;
+import com.api.bank.repository.BankRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -12,61 +11,51 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class BankController {
 
     @Autowired
-    private CertificationRuleRepository certificationRuleRepository;
+    private BankRepository bankRepository;
 
     @GetMapping("/")
     public String cadastro() {
-
         return "cadastro.html";
     }
 
     @PostMapping("/salvar")
-    public ResponseEntity<String> salvar(@RequestParam("name") String name,
-                                         @RequestParam("content") String content,
-                                         @RequestParam("track") int track,
-                                         @RequestParam("length") int length,
-                                         @RequestParam("position") int position,
-                                         @RequestParam("active") int active,
-                                         @RequestParam("templateid") int templateid,
-                                         @RequestParam("templateparams") String templateparams,
-                                         @RequestParam("templatedesc") String templatedesc) {
+    public ResponseEntity<String> salvar(@RequestParam("nome") String nome,
+                                         @RequestParam("idade") int idade,
+                                         @RequestParam("email") String email,
+                                         @RequestParam("senha") String senha,
+                                         @RequestParam("saldo") float saldo) {
 
-        CertificationRule certificationRule = new CertificationRule();
-        certificationRule.setCertification(name, content, track, length, position, active, templateid, templateparams, templatedesc);
-        certificationRuleRepository.save(certificationRule);
+        BankEntityUser bank = new BankEntityUser();
+        bank.setUsuario(nome, idade, email, senha, saldo);
+        bankRepository.save(bank);
 
-        // Retornar o redirecionamento para "/Lista"
         HttpHeaders headers = new HttpHeaders();
         headers.add("Location", "/");
         return new ResponseEntity<>(headers, HttpStatus.FOUND);
     }
 
-
     @GetMapping("/lista")
-    public ModelAndView listaCadastro(){
+    public ModelAndView listaCadastro() {
         ModelAndView modelAndView = new ModelAndView();
-        Iterable<CertificationRule> certificationRulesIt = certificationRuleRepository.findAll();
-        modelAndView.addObject("certificationRules", certificationRulesIt);
+        Iterable<BankEntityUser> bankIt = bankRepository.findAll();
+        modelAndView.addObject("bank", bankIt);
         modelAndView.setViewName("lista.html");
         return modelAndView;
     }
 
     @GetMapping("/editar/{id}")
     public ModelAndView editar(@PathVariable("id") Long id) {
-        CertificationRule cadastro = certificationRuleRepository.findById(id).orElse(null);
-        ModelAndView modelAndView = new ModelAndView("editar.html");
-        modelAndView.addObject("cadastro", cadastro);
-        return modelAndView;
-    }
-
-    @GetMapping("/editarPesquisa/{id}")
-    public ModelAndView editarPesquisa(@PathVariable("id") Long id) {
-        CertificationRule cadastro = certificationRuleRepository.findById(id).orElse(null);
+        Optional<BankEntityUser> cadastroOpt = bankRepository.findById(id);
+        if (cadastroOpt.isEmpty()) {
+            return new ModelAndView("redirect:/lista");
+        }
+        BankEntityUser cadastro = cadastroOpt.get();
         ModelAndView modelAndView = new ModelAndView("editar.html");
         modelAndView.addObject("cadastro", cadastro);
         return modelAndView;
@@ -74,21 +63,18 @@ public class BankController {
 
     @PostMapping("/atualizar")
     public ResponseEntity<String> atualizar(@RequestParam("id") Long id,
-                                            @RequestParam("name") String name,
-                                            @RequestParam("content") String content,
-                                            @RequestParam("track") int track,
-                                            @RequestParam("length") int length,
-                                            @RequestParam("position") int position,
-                                            @RequestParam("active") int active,
-                                            @RequestParam("templateid") int templateid,
-                                            @RequestParam("templateparams") String templateparams,
-                                            @RequestParam("templatedesc") String templatedesc) {
+                                            @RequestParam("nome") String nome,
+                                            @RequestParam("idade") int idade,
+                                            @RequestParam("email") String email,
+                                            @RequestParam("senha") String senha,
+                                            @RequestParam("saldo") float saldo) {
 
-        CertificationRule certificationRule = certificationRuleRepository.findById(id).orElse(null);
+        Optional<BankEntityUser> bankOpt = bankRepository.findById(id);
 
-        if (certificationRule != null) {
-            certificationRule.setCertification(name, content, track, length, position, active, templateid, templateparams, templatedesc);
-            certificationRuleRepository.save(certificationRule);
+        if (bankOpt.isPresent()) {
+            BankEntityUser bank = bankOpt.get();
+            bank.setUsuario(nome, idade, email, senha, saldo);
+            bankRepository.save(bank);
             HttpHeaders headers = new HttpHeaders();
             headers.add("Location", "/lista");
             return new ResponseEntity<>(null, headers, HttpStatus.FOUND);
@@ -99,16 +85,8 @@ public class BankController {
 
     @GetMapping("/delete/{id}")
     public String deletar(@PathVariable("id") Long id) {
-        certificationRuleRepository.deleteById(id);
+        bankRepository.deleteById(id);
         return "redirect:/lista";
-
-    }
-
-    @GetMapping("/deletePesquisa/{id}")
-    public String deletarPesquisa(@PathVariable("id") Long id) {
-        certificationRuleRepository.deleteById(id);
-        return "redirect:/pesquisa";
-
     }
 
     @GetMapping("/pesquisa")
@@ -118,10 +96,9 @@ public class BankController {
 
     @PostMapping("/pesquisar")
     public ModelAndView pesquisar(@RequestParam("nomepesquisa") String nomepesquisa) {
-        List<CertificationRule> resultados = certificationRuleRepository.findByNameContainingIgnoreCase(nomepesquisa);
+        List<BankEntityUser> resultados = bankRepository.findByNomeContainingIgnoreCase(nomepesquisa);
         ModelAndView modelAndView = new ModelAndView("pesquisa.html");
-        modelAndView.addObject("resultados", resultados);
+        modelAndView.addObject("bankPesquisa", resultados);
         return modelAndView;
     }
-
 }
