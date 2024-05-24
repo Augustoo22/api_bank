@@ -248,3 +248,4 @@ O padrão Repository será utilizado para a camada de acesso a dados, abstraindo
 ### Responsáveis pelo projeto
 - Victor Augusto
 - Misael Willian
+- Guilherme Martins
