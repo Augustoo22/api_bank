@@ -21,6 +21,7 @@ public class BankController {
 
     @GetMapping("/")
     public String cadastro() {
+
         return "cadastro.html";
     }
 
@@ -101,4 +102,20 @@ public class BankController {
         modelAndView.addObject("bankPesquisa", resultados);
         return modelAndView;
     }
+
+    @GetMapping("/pagina_inicial/{id}")
+    public ModelAndView paginaInicial(@PathVariable("id") Long id) {
+        Optional<BankEntityUser> bankOpt = bankRepository.findById(id);
+        ModelAndView modelAndView = new ModelAndView("pagina_inicial");
+        if (bankOpt.isPresent()) {
+            BankEntityUser bank = bankOpt.get();
+            modelAndView.addObject("bank", bank);
+        } else {
+            modelAndView.addObject("message", "Usuário não encontrado");
+        }
+        return modelAndView;
+    }
+
+
+
 }
