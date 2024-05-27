@@ -1,10 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Pagina Inicial</title>
 </head>
 <body>
-
+<div th:if="${bank != null}">
+    <p>Nome: <span th:text="${bank.nome}"></span></p>
+    <p>Saldo: <span th:text="${bank.saldo}"></span></p>
+</div>
+<div th:if="${message != null}">
+    <p th:text="${message}"></p>
+</div>
 </body>
 </html>
