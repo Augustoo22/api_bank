@@ -1,6 +1,8 @@
 package com.api.bank.entity;
 
 import jakarta.persistence.*;
+
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Entity
@@ -25,7 +27,7 @@ public class BankUserModel {
     private String userPassword;
 
     @Column(name = "USER_BALANCE")
-    private float userBalance;
+    private BigDecimal userBalance;
 
     @ManyToOne
     @JoinColumn(name="user_type_id")
@@ -37,7 +39,7 @@ public class BankUserModel {
                          int userAge,
                          String userEmail,
                          String userPassword,
-                         float userBalance,
+                         BigDecimal userBalance,
                          BankUserType bankUserType) {
         this.username = username;
         this.userAge = userAge;
@@ -52,7 +54,7 @@ public class BankUserModel {
                          int userAge,
                          String userEmail,
                          String userPassword,
-                         float userBalance,
+                         BigDecimal userBalance,
                          BankUserType bankUserType) {
         this.id = id;
         this.username = username;
@@ -103,11 +105,11 @@ public class BankUserModel {
         this.userPassword = userPassword;
     }
 
-    public float getUserBalance() {
+    public BigDecimal getUserBalance() {
         return userBalance;
     }
 
-    public void setUserBalance(float userBalance) {
+    public void setUserBalance(BigDecimal userBalance) {
         this.userBalance = userBalance;
     }
 
@@ -123,7 +125,7 @@ public class BankUserModel {
                            int userAge,
                            String userEmail,
                            String userPassword,
-                           float userBalance) {
+                           BigDecimal userBalance) {
 
         this.username = username;
         this.userAge = userAge;
