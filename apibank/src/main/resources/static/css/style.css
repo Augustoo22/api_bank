@@ -1,64 +1,75 @@
-body {
-    display:
-    flex;justify-content:
-    center;align-items:
-    center;min-height: 100vh;
+* {
     margin: 0;
-    background-color: #f8f9fa;
+    padding: 0;
 }
 
-form {
-    width: 100%;
-    max-width: 500px;
+body {
+    background-color: #EEEEEE;
 }
 
-form label {
+header {
     display: flex;
-}
-
-form input {
-    width: 100%;
-    padding: 0px;
-    margin-bottom: 0px;
-    border: 1px solid #ced4da;
-    border-radius: 4px;
-}
-
-form button {
-    width: 100%;
-    padding: 10px;
-    margin-top: 10px;
-}
-
-.button-group {
-    display: flex;
+    background-color: #171332;
+    font-size: 55px;
+    color: #4AE3B5;
     justify-content: space-between;
-    margin-top: 20px;
+    align-items: center;
 }
 
-.button-group a {
-    width: 48%;
+header h2 {
+    margin-right: auto;
 }
 
-.menu {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 200px;
-    height: 100%;
-    background-color: #f8f9fa;
-    padding-top: 20px;
-    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+.nomeUsuario{
+    font-size: 32px;
+    margin-right: 20px;
+    font-family: Arial, sans-serif;
 }
 
-.menu a {
-    display: block;
-    color: #333;
+.Sair {
+    margin-right: 20px;
     padding: 10px 20px;
-    text-decoration: none;
-    font-size: 16px;
+    font-size: 18px;
+    background-color: #4AE3B5;
+    color: #171332;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
 }
 
-.menu a:hover {
-    background-color: #e9ecef;
+.Sair:hover {
+    background-color: #45c1a3;
 }
+
+.Sair:focus {
+    outline: none;
+}
+
+.saldo {
+    background-color: #4AE3B5;
+    border: 5px solid #2A5D67;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 30px;
+    max-width: 100%;
+    font-family: Arial, sans-serif;
+}
+
+.saldo p {
+    font-size: 40px;
+    color: #171332;
+    text-align: right;
+}
+
+.saldo span {
+    font-size: 40px;
+    color: #171332;
+    text-align: right;
+}
+
+
+
+
+
+
+
