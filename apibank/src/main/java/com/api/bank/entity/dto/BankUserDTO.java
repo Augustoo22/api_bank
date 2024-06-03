@@ -1,11 +1,9 @@
 package com.api.bank.entity.dto;
 
 import com.api.bank.entity.BankUserModel;
-import com.api.bank.entity.EnumUserType;
-import com.api.bank.entity.BankUserType;
+import com.api.bank.entity.enums.EnumUserType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-
 import java.math.BigDecimal;
 
 public record BankUserDTO(@NotBlank String username,
@@ -15,14 +13,23 @@ public record BankUserDTO(@NotBlank String username,
                           @NotBlank BigDecimal userBalance,
                           @NotNull EnumUserType userType) {
     public BankUserModel toUser(){
-        BankUserType bankUserTypeEntity = userType.get();
         return new BankUserModel(
                 username,
                 userAge,
                 userEmail,
                 userPassword,
                 userBalance,
-                bankUserTypeEntity
+                userType
+        );
+    }
+    public static BankUserDTO fromUser(BankUserModel bankUser) {
+        return new BankUserDTO(
+                bankUser.getUsername(),
+                bankUser.getUserAge(),
+                bankUser.getUserEmail(),
+                bankUser.getUserPassword(),
+                bankUser.getUserBalance(),
+                bankUser.getBankUserType()
         );
     }
 }

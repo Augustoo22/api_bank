@@ -8,6 +8,4 @@ import java.util.List;
 import java.util.UUID;
 
 @Repository
-public interface BankUserRepository extends JpaRepository<BankUserModel, UUID> {
-    List<BankUserModel> findByNomeContainingIgnoreCase(String nome);
-}
+public interface BankUserRepository extends JpaRepository<BankUserModel, UUID> {}

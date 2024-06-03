@@ -1,12 +1,19 @@
 package com.api.bank.entity;
 
+import com.api.bank.entity.enums.EnumUserType;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.util.UUID;
 
 @Entity
 @Table(name = "tb_usuario")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class BankUserModel {
 
     @Id
@@ -31,93 +38,19 @@ public class BankUserModel {
 
     @ManyToOne
     @JoinColumn(name="user_type_id")
-    private BankUserType bankUserType;
-
-    public BankUserModel() {}
+    private EnumUserType bankUserType;
 
     public BankUserModel(String username,
                          int userAge,
                          String userEmail,
                          String userPassword,
                          BigDecimal userBalance,
-                         BankUserType bankUserType) {
+                         EnumUserType bankUserType) {
         this.username = username;
         this.userAge = userAge;
         this.userEmail = userEmail;
         this.userPassword = userPassword;
         this.userBalance = userBalance;
-        this.bankUserType = bankUserType;
-    }
-
-    public BankUserModel(UUID id,
-                         String username,
-                         int userAge,
-                         String userEmail,
-                         String userPassword,
-                         BigDecimal userBalance,
-                         BankUserType bankUserType) {
-        this.id = id;
-        this.username = username;
-        this.userAge = userAge;
-        this.userEmail = userEmail;
-        this.userPassword = userPassword;
-        this.userBalance = userBalance;
-        this.bankUserType = bankUserType;
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public int getUserAge() {
-        return userAge;
-    }
-
-    public void setUserAge(int userAge) {
-        this.userAge = userAge;
-    }
-
-    public String getUserEmail() {
-        return userEmail;
-    }
-
-    public void setUserEmail(String userEmail) {
-        this.userEmail = userEmail;
-    }
-
-    public String getUserPassword() {
-        return userPassword;
-    }
-
-    public void setUserPassword(String userPassword) {
-        this.userPassword = userPassword;
-    }
-
-    public BigDecimal getUserBalance() {
-        return userBalance;
-    }
-
-    public void setUserBalance(BigDecimal userBalance) {
-        this.userBalance = userBalance;
-    }
-
-    public BankUserType getUserType() {
-        return bankUserType;
-    }
-
-    public void setUserType(BankUserType bankUserType) {
         this.bankUserType = bankUserType;
     }
 
