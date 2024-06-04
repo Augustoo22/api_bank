@@ -15,11 +15,10 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BankUserModel {
-
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "USER_ID")
-    private UUID id;
+    private Long id;
 
     @Column(name = "USERNAME")
     private String username;
@@ -52,6 +51,18 @@ public class BankUserModel {
         this.userPassword = userPassword;
         this.userBalance = userBalance;
         this.bankUserType = bankUserType;
+    }
+
+    public boolean isBalancerEqualOrGreatherThan(BigDecimal value) {
+        return this.userBalance.doubleValue() >= value.doubleValue();
+    }
+
+    public void debit(BigDecimal value) {
+        this.userBalance = this.userBalance.subtract(value);
+    }
+
+    public void credit(BigDecimal value) {
+        this.userBalance = this.userBalance.add(value);
     }
 
     public void setUsuario(String username,
