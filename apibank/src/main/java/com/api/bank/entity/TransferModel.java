@@ -26,4 +26,9 @@ public class TransferModel {
     @Column(name = "value_transfer")
     private BigDecimal valueTransfer;
 
+    public TransferModel(BankUserModel userReceiver, BankUserModel userSender, BigDecimal valueTransfer) {
+        this.userReceiver = userReceiver;
+        this.userSender = userSender;
+        this.valueTransfer = valueTransfer;
+    }
 }
