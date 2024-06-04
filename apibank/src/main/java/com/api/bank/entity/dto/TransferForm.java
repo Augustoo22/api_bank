@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
 
-public record TransferDTO(
+public record TransferForm(
         @DecimalMin("0.01") @NotNull BigDecimal valueTransfer,
         @NotNull Long payer,
         @NotNull Long payee

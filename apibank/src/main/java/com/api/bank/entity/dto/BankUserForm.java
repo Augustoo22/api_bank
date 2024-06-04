@@ -6,12 +6,12 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
-public record BankUserDTO(@NotBlank String username,
-                          @NotBlank int userAge,
-                          @NotBlank String userEmail,
-                          @NotBlank String userPassword,
-                          @NotBlank BigDecimal userBalance,
-                          @NotNull EnumUserType userType) {
+public record BankUserForm(@NotBlank String username,
+                           @NotBlank int userAge,
+                           @NotBlank String userEmail,
+                           @NotBlank String userPassword,
+                           @NotBlank BigDecimal userBalance,
+                           @NotNull EnumUserType userType) {
     public BankUserModel toUser(){
         return new BankUserModel(
                 username,
@@ -22,8 +22,8 @@ public record BankUserDTO(@NotBlank String username,
                 userType
         );
     }
-    public static BankUserDTO fromUser(BankUserModel bankUser) {
-        return new BankUserDTO(
+    public static BankUserForm fromUser(BankUserModel bankUser) {
+        return new BankUserForm(
                 bankUser.getUsername(),
                 bankUser.getUserAge(),
                 bankUser.getUserEmail(),
