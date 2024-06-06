@@ -114,8 +114,26 @@ public class BankController {
             modelAndView.addObject("message", "Usuário não encontrado");
         }
         return modelAndView;
+
+
+    }
+
+    @GetMapping("/pix/{id}")
+    public ModelAndView pix(@PathVariable("id") Long id) {
+        Optional<BankEntityUser> bankOpt = bankRepository.findById(id);
+        ModelAndView modelAndView = new ModelAndView("pix");
+        if (bankOpt.isPresent()) {
+            BankEntityUser bank = bankOpt.get();
+            modelAndView.addObject("bank", bank);
+        } else {
+            modelAndView.addObject("message", "Usuário não encontrado");
+        }
+        return modelAndView;
     }
 
 
 
+
 }
+
+
