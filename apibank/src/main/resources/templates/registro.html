@@ -1,10 +1,49 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8">
+    <title>Registro</title>
+    <link href="../static/css/styleRegistro.css" th:href="@{/css/styleRegistro.css}" rel="stylesheet" />
 </head>
 <body>
-$END$
+<header>
+    <h2>VMG</h2>
+    <p class="nomeUsuario">Olá,<span th:text="${bank.nome}"></span></p>
+    <button class="Sair">Sair</button>
+</header>
+
+<div class="saldo" th:if="${bank != null}">
+    <p>R$ <span th:text="${bank.saldo}"></span></p>
+</div>
+
+<div class="menu">
+    <nav>
+        <button><a th:href="@{/pix/{id}(id=${bank.id})}">PIX</a></button>
+        <button><a th:href="@{/editar/{id}(id=${bank.id})}">Editar</a></button>
+        <button><a th:href="@{/pagina_inicial/{id}(id=${bank.id})}">Inicio</a></button>
+    </nav>
+</div>
+
+
+<div class="historico-transferencias">
+    <h3>Histórico de Transferências</h3>
+    <table>
+        <thead>
+        <tr>
+            <th>Data-Hora</th>
+            <th>Valor</th>
+            <th>Para Quem</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="transferencia : ${transferencias}">
+            <td th:text="${transferencia.dataHora}"></td>
+            <td th:text="${transferencia.valor}"></td>
+            <td th:text="${transferencia.paraQuem}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
 </body>
 </html>
