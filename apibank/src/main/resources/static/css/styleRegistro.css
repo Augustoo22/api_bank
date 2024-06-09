@@ -1,0 +1,112 @@
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #EEEEEE;
+        }
+
+        header {
+            display: flex;
+            background-color: #171332;
+            font-size: 55px;
+            color: #4AE3B5;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h2 {
+            margin-right: auto;
+        }
+
+        .nomeUsuario {
+            font-size: 32px;
+            margin-right: 20px;
+            font-family: Arial, sans-serif;
+        }
+
+        .Sair {
+            margin-right: 20px;
+            padding: 10px 20px;
+            font-size: 18px;
+            background-color: #4AE3B5;
+            color: #171332;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .Sair:hover {
+            background-color: #45c1a3;
+        }
+
+        .Sair:focus {
+            outline: none;
+        }
+
+        .saldo {
+            background-color: #4AE3B5;
+            border: 5px solid #2A5D67;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 30px;
+            max-width: 100%;
+            font-family: Arial, sans-serif;
+        }
+
+        .saldo p {
+            font-size: 40px;
+            color: #171332;
+            text-align: right;
+        }
+
+        .saldo span {
+            font-size: 40px;
+            color: #171332;
+            text-align: right;
+        }
+
+        .menu {
+            display: flex;
+            justify-content: center;
+        }
+
+        nav {
+            border-bottom: 5px solid #4AE3B5;
+            border-radius: 10px;
+            width: 350px;
+            height: 100px;
+            text-align: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #171332;
+            padding: 0 20px;
+        }
+
+        nav button {
+            height: 50px;
+            background-color: #171332;
+            border: 5px solid #4AE3B5;
+            border-top: none;
+            border-radius: 5px;
+            margin: 0 5px;
+            cursor: pointer;
+        }
+
+        nav button a {
+            display: block;
+            text-align: center;
+            color: #4AE3B5;
+            padding: 10px 20px;
+        }
+
+        nav button:hover {
+             background-color: #2A5D67;
+
+        }
+
+        nav button:active {
+           background-color: #EEEEEE;
+        }
