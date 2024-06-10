@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Página Inicial</title>
+    <link href="../static/css/styleTransferencia.css" th:href="@{/css/styleTransferencia.css}" rel="stylesheet" />
+</head>
+<body>
+<header>
+    <h2>VMG</h2>
+    <p class="nomeUsuario">Olá,<span th:text="${bank.nome}"></span></p>
+    <button class="Sair">Sair</button>
+</header>
+
+<div class="saldo" th:if="${bank != null}">
+    <p>R$ <span th:text="${bank.saldo}"></span></p>
+</div>
+
+<div class="menu">
+    <nav>
+        <button><a th:href="@{/pagina_inicial/{id}(id=${bank.id})}">Inicio</a></button>
+        <button><a th:href="@{/editar/{id}(id=${bank.id})}">Editar</a></button>
+        <button><a th:href="@{/registro/{id}(id=${bank.id})}">Registro</a></button>
+    </nav>
+</div>
+
+<div class="formulario-pix">
+    <form action="#" method="post">
+        <label for="chave-pix">Chave PIX:</label>
+        <input type="text" id="chave-pix" name="chave-pix" required>
+
+        <label for="valor">Valor:</label>
+        <input type="number" id="valor" name="valor" required step="0.01">
+
+        <button type="submit">Enviar</button>
+    </form>
+</div>
+
+
+</body>
+</html>

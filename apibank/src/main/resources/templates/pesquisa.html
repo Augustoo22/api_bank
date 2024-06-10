@@ -11,8 +11,7 @@
 <a th:href="@{/}"><button class="btn btn-outline-primary">Cadastro</button></a>
 <form method="post" th:action="@{/pesquisar}">
     <label>Pesquisa por nome</label>
-    <input name="nomepesquisa">
-    <button type="submit" value="buscar">Pesquisar</button>
+    <input name="nomepesquisa">    <button type="submit" value="buscar">Pesquisar</button>
 </form>
 
 <div th:if="${bankPesquisa != null}">
