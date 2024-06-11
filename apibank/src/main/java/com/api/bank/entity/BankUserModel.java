@@ -5,8 +5,13 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.math.BigDecimal;
+import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -14,7 +19,7 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class BankUserModel {
+public class BankUserModel implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "USER_ID")
@@ -65,17 +70,34 @@ public class BankUserModel {
         this.userBalance = this.userBalance.add(value);
     }
 
-    public void setUsuario(String username,
-                           int userAge,
-                           String userEmail,
-                           String userPassword,
-                           BigDecimal userBalance) {
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+       if(this.bankUserType == EnumUserType.ADMIN){ return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));}
+        else return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+    }
 
-        this.username = username;
-        this.userAge = userAge;
-        this.userEmail = userEmail;
-        this.userPassword = userPassword;
-        this.userBalance = userBalance;
+    @Override
+    public String getPassword() {
+        return userPassword;
+    }
 
+    @Override
+    public boolean isAccountNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return false;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return false;
     }
 }
