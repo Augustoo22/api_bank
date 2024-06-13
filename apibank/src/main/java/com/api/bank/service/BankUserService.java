@@ -1,16 +1,15 @@
 package com.api.bank.service;
 
 import com.api.bank.entity.BankUserModel;
-import com.api.bank.entity.dto.BankUserForm;
+import com.api.bank.entity.dto.BankUserFormRegister;
+import com.api.bank.entity.dto.BankUserFormResponse;
+import com.api.bank.entity.dto.BankUserFormUpdate;
 import com.api.bank.repository.BankUserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class BankUserService {
@@ -18,50 +17,44 @@ public class BankUserService {
     @Autowired
     private BankUserRepository userRepository;
 
-    @Transactional
-    public List<BankUserForm> getAllUsers() {
-        return userRepository.findAll().stream()
-                .map(BankUserForm::fromUser)
-                .collect(Collectors.toList());
+    private BankUserModel authenticateUser(String userEmail, String userPassword) {
+        return userRepository.findByEmailAndPassword(userEmail, userPassword)
+                .orElseThrow(() -> new NoSuchElementException("User not found with email: " + userEmail));
     }
 
     @Transactional
-    public BankUserForm getOneUser(String userEmail, String userPassword) {
-        Optional<BankUserModel> existingUser = userRepository.findByEmailAndPassword(userEmail, userPassword);
-        if (existingUser.isPresent()) {
-            return BankUserForm.fromUser(existingUser.get());
-        } else {
-            throw new NoSuchElementException("User not found with email: " + userEmail);
-        }
+    public List<BankUserFormResponse> getAllUsers() {
+        List<BankUserModel> users = userRepository.findAll();
+        return BankUserFormResponse.toUserResponse(users);
     }
 
     @Transactional
-    public BankUserModel createUser(BankUserForm dto) {
-        return userRepository.save(dto.toUser());
+    public BankUserFormResponse userLogin(String userEmail, String userPassword) {
+        BankUserModel existingUser = authenticateUser(userEmail, userPassword);
+        return BankUserFormResponse.toUserResponse(existingUser);
     }
 
     @Transactional
-    public String deleteUser(String userEmail, String userPassword) {
-        Optional<BankUserModel> existingUser = userRepository.findByEmailAndPassword(userEmail, userPassword);
-        if (existingUser.isPresent()) {
-            userRepository.delete(existingUser.get());
-            return "User deleted successfully";
-        } else {
-            throw new NoSuchElementException("User not found with email: " + userEmail);
-        }
+    public BankUserModel createUser(BankUserFormRegister dto) {
+        BankUserModel userModel = BankUserFormRegister.toUserRequest(dto);
+        return userRepository.save(userModel);
     }
 
     @Transactional
-    public BankUserForm updateUser(String userEmail, String userPassword, BankUserForm userForm) {
-        BankUserModel existingUser = userRepository.findByEmailAndPassword(userEmail, userPassword)
-                .orElseThrow(() -> new NoSuchElementException("User not found with id: " + userEmail));
-        existingUser.setUsername(userForm.username());
-        existingUser.setUserAge(userForm.userAge());
-        existingUser.setUserEmail(userForm.userEmail());
-        existingUser.setUserPassword(userForm.userPassword());
-        existingUser.setUserBalance(userForm.userBalance());
-        existingUser.setBankUserType(userForm.userType());
+    public void deleteUser(String userEmail, String userPassword) {
+        BankUserModel existingUser = authenticateUser(userEmail, userPassword);
+        userRepository.delete(existingUser);
+    }
+
+    @Transactional
+    public BankUserFormResponse updateUser(BankUserFormUpdate userFormUpdate) {
+        BankUserModel existingUser = authenticateUser(userFormUpdate.userFormLogin().userEmailPixKey(), userFormUpdate.userFormLogin().userPassword());
+        existingUser.setUsername(userFormUpdate.userFormRegister().username());
+        existingUser.setUserCpf(userFormUpdate.userFormRegister().userCPF());
+        existingUser.setUserEmailPixKey(userFormUpdate.userFormRegister().userEmailPixKey());
+        existingUser.setUserPassword(userFormUpdate.userFormRegister().userPassword());
+        existingUser.setUserType(userFormUpdate.userFormRegister().userType());
         BankUserModel updatedUser = userRepository.save(existingUser);
-        return BankUserForm.fromUser(updatedUser);
+        return BankUserFormResponse.toUserResponse(updatedUser);
     }
 }
