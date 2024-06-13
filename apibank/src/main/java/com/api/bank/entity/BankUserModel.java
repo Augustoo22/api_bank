@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 @Entity
-@Table(name = "tb_usuario")
+@Table(name = "tb_bank_user")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -26,7 +26,7 @@ public class BankUserModel {
     @Column(name = "USER_AGE")
     private int userAge;
 
-    @Column(name = "USER_EMAIL")
+    @Column(name = "USER_EMAIL", unique = true)
     private String userEmail;
 
     @Column(name = "USER_PASSWORD")
@@ -35,24 +35,27 @@ public class BankUserModel {
     @Column(name = "USER_BALANCE")
     private BigDecimal userBalance;
 
-    @ManyToOne
-    @JoinColumn(name="user_type_id")
-    private EnumUserType bankUserType;
+    @Column(name = "USER_CPF", unique = true)
+    private String userCpf;
+
+    @Enumerated(EnumType.STRING)
+    private EnumUserType userType;
 
     public BankUserModel(String username,
                          int userAge,
                          String userEmail,
                          String userPassword,
                          BigDecimal userBalance,
+                         String userCPF,
                          EnumUserType bankUserType) {
         this.username = username;
         this.userAge = userAge;
         this.userEmail = userEmail;
         this.userPassword = userPassword;
         this.userBalance = userBalance;
-        this.bankUserType = bankUserType;
+        this.userCpf = userCPF;
+        this.userType = bankUserType;
     }
-
     public boolean isBalancerEqualOrGreatherThan(BigDecimal value) {
         return this.userBalance.doubleValue() >= value.doubleValue();
     }
@@ -65,17 +68,4 @@ public class BankUserModel {
         this.userBalance = this.userBalance.add(value);
     }
 
-    public void setUsuario(String username,
-                           int userAge,
-                           String userEmail,
-                           String userPassword,
-                           BigDecimal userBalance) {
-
-        this.username = username;
-        this.userAge = userAge;
-        this.userEmail = userEmail;
-        this.userPassword = userPassword;
-        this.userBalance = userBalance;
-
-    }
 }
