@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 
 public record BankUserFormRegister(@NotBlank String username,
                                    @NotBlank int userAge,
-                                   @NotBlank String userEmail,
+                                   @NotBlank String userEmailPixKey,
                                    @NotBlank String userPassword,
                                    @NotBlank BigDecimal userBalance,
                                    @NotNull String userCPF,
@@ -18,7 +18,7 @@ public record BankUserFormRegister(@NotBlank String username,
     public static BankUserModel toUserRequest(BankUserFormRegister user) {
         return new BankUserModel( user.username,
                                   user.userAge,
-                                  user.userEmail,
+                                  user.userEmailPixKey,
                                   user.userPassword,
                                   user.userBalance,
                                   user.userCPF,

@@ -26,8 +26,8 @@ public class BankUserModel {
     @Column(name = "USER_AGE")
     private int userAge;
 
-    @Column(name = "USER_EMAIL", unique = true)
-    private String userEmail;
+    @Column(name = "USER_EMAIL_PIX_KEY", unique = true)
+    private String userEmailPixKey;
 
     @Column(name = "USER_PASSWORD")
     private String userPassword;
@@ -43,14 +43,14 @@ public class BankUserModel {
 
     public BankUserModel(String username,
                          int userAge,
-                         String userEmail,
+                         String userEmailPixKey,
                          String userPassword,
                          BigDecimal userBalance,
                          String userCPF,
                          EnumUserType bankUserType) {
         this.username = username;
         this.userAge = userAge;
-        this.userEmail = userEmail;
+        this.userEmailPixKey = userEmailPixKey;
         this.userPassword = userPassword;
         this.userBalance = userBalance;
         this.userCpf = userCPF;
