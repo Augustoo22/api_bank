@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -18,7 +19,7 @@ public class BankUserModel {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "USER_ID")
-    private Long id;
+    private UUID id;
 
     @Column(name = "USERNAME")
     private String username;
@@ -41,13 +42,14 @@ public class BankUserModel {
     @Enumerated(EnumType.STRING)
     private EnumUserType userType;
 
-    public BankUserModel(String username,
-                         int userAge,
-                         String userEmailPixKey,
-                         String userPassword,
-                         BigDecimal userBalance,
-                         String userCPF,
-                         EnumUserType bankUserType) {
+    @OneToMany(mappedBy = "userSender")
+    private List<TransferModel> sentTransfers;
+
+    @OneToMany(mappedBy = "userReceiver")
+    private List<TransferModel> receivedTransfers;
+
+    public BankUserModel(String username, int userAge, String userEmailPixKey, String userPassword,
+                         BigDecimal userBalance, String userCPF, EnumUserType bankUserType) {
         this.username = username;
         this.userAge = userAge;
         this.userEmailPixKey = userEmailPixKey;
@@ -56,7 +58,8 @@ public class BankUserModel {
         this.userCpf = userCPF;
         this.userType = bankUserType;
     }
-    public boolean isBalancerEqualOrGreatherThan(BigDecimal value) {
+
+    public boolean isBalanceEqualOrGreaterThan(BigDecimal value) {
         return this.userBalance.doubleValue() >= value.doubleValue();
     }
 
@@ -67,5 +70,4 @@ public class BankUserModel {
     public void credit(BigDecimal value) {
         this.userBalance = this.userBalance.add(value);
     }
-
 }

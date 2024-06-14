@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Cadastro</title>
+    <link href="../static/css/styleCadastro.css" th:href="@{/css/styleCadastro.css}" rel="stylesheet" />
+</head>
+<body>
+<header>
+    <h2>VMG</h2>
+</header>
+
+<div class="form-container">
+    <form action="#" th:action="@{/salvar}" th:object="${bankUserFormRegister}" method="post">
+        <label for="username">Nome:</label>
+        <input type="text" id="username" name="username" th:field="*{username}" required>
+
+        <label for="userAge">Idade:</label>
+        <input type="number" id="userAge" name="userAge" th:field="*{userAge}" required>
+
+        <label for="userEmailPixKey">Email:</label>
+        <input type="email" id="userEmailPixKey" name="userEmailPixKey" th:field="*{userEmailPixKey}" required>
+
+        <label for="userPassword">Senha:</label>
+        <input type="password" id="userPassword" name="userPassword" th:field="*{userPassword}" required>
+
+        <label for="userBalance">Saldo:</label>
+        <input type="text" id="userBalance" name="userBalance" th:field="*{userBalance}" required>
+
+        <label for="userCPF">CPF:</label>
+        <input type="text" id="userCPF" name="userCPF" th:field="*{userCPF}" required>
+
+        <label for="userType">Tipo:</label>
+        <select id="userType" name="userType" th:field="*{userType}" required>
+            <option value="PREMIUM">USER</option>
+        </select>
+
+        <button type="submit" class="btn btn-primary">Enviar</button>
+    </form>
+</div>
+
+</body>
+</html>
