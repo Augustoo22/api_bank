@@ -8,9 +8,9 @@ import com.api.bank.repository.TransferRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class TransferService {
@@ -23,12 +23,12 @@ public class TransferService {
 
     @Transactional
     public String transfer(TransferForm transferForm) {
-        var sender = bankUserRepository.findById(transferForm.payer());
+        Optional<BankUserModel> sender = bankUserRepository.findById(transferForm.payer());
         if (sender.isEmpty()) {
             return "Error: Payer user not found with ID: " + transferForm.payer();
         }
 
-        var receiver = bankUserRepository.findById(transferForm.payee());
+        Optional<BankUserModel> receiver = bankUserRepository.findById(transferForm.payee());
         if (receiver.isEmpty()) {
             return "Error: Payee user not found with ID: " + transferForm.payee();
         }
@@ -36,26 +36,26 @@ public class TransferService {
         BankUserModel senderModel = sender.get();
         BankUserModel receiverModel = receiver.get();
 
+        if (!senderModel.isBalanceEqualOrGreaterThan(transferForm.valueTransfer())) {
+            return "Error: Insufficient balance for user ID: " + transferForm.payer();
+        }
+
         senderModel.debit(transferForm.valueTransfer());
         receiverModel.credit(transferForm.valueTransfer());
 
-        var transfer = new TransferModel(senderModel, receiverModel, transferForm.valueTransfer());
+        TransferModel transfer = new TransferModel(receiverModel, senderModel, transferForm.valueTransfer());
 
         bankUserRepository.save(senderModel);
         bankUserRepository.save(receiverModel);
-        var transferResult = transferRepository.save(transfer);
+        TransferModel transferResult = transferRepository.save(transfer);
 
         return "Transfer successful: Value: " + transferResult.getValueTransfer() +
                 ", Payer ID: " + transferResult.getUserSender().getId() +
                 ", Payee ID: " + transferResult.getUserReceiver().getId();
     }
+
     @Transactional
-    public List<TransferModel> getTransfersByUserId(Long userId) {
-        List<TransferModel> transfers = transferRepository.findAll();
-        return transfers.stream()
-                .filter(transfer -> transfer.getUserSender().getId().equals(userId) ||
-                        transfer.getUserReceiver().getId().equals(userId))
-                .collect(Collectors.toList());
+    public List<TransferModel> getTransfersByUserId(UUID userId) {
+        return transferRepository.findByUserReceiverIdOrUserSenderId(userId, userId);
     }
 }
-
