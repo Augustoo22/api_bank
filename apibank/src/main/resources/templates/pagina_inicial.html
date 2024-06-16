@@ -3,14 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <title>Página Inicial</title>
-    <link href="../static/css/stylePaginaInicial.css" th:href="@{/css/stylePaginaInicial.css}" rel="stylesheet" />
+    <link th:href="@{/css/stylePaginaInicial.css}" rel="stylesheet" />
 </head>
 <body>
 <header>
     <h2>VMG</h2>
-    <p class="nomeUsuario">Olá,<span th:text="${bank.nome}"></span></p>
+    <p class="nomeUsuario">Olá, <span th:text="${bank.nome}"></span></p>
     <button class="Sair">Sair</button>
 </header>
+
+<input type="hidden" id="jwtToken" th:value="${token}" />
 
 <div class="saldo" th:if="${bank != null}">
     <p>R$ <span th:text="${bank.saldo}"></span></p>
