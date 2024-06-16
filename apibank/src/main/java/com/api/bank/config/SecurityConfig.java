@@ -1,6 +1,7 @@
 package com.api.bank.config;
 
 import com.api.bank.service.UsuarioService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -8,23 +9,20 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private final UsuarioService usuarioService;
-
-    public SecurityConfig(UsuarioService usuarioService) {
-        this.usuarioService = usuarioService;
-    }
+    @Autowired
+    private UsuarioService usuarioService;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
                         .requestMatchers("/usuarios/cadastro", "/usuarios/salvar").permitAll()
                         .anyRequest().authenticated()
                 )
