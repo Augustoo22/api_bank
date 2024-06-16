@@ -81,7 +81,7 @@ public class UsuarioService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Optional<Usuario> usuario = buscarPorEmail(email);
-        if (usuario == null) {
+        if (!usuario.isPresent()) {
             throw new UsernameNotFoundException("Usuário não encontrado com email: " + email);
         }
         return User.withUsername(usuario.get().getEmail())

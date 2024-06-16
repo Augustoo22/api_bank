@@ -22,13 +22,15 @@ public class TransferenciaService {
     @Transactional
     public String transfer(Transferencia transferencia) {
         // Buscar o usuário pagador
-        var sender = usuarioRepository.findById(Long.parseLong(transferencia.getOrigem()));
+        Long origemId = Long.parseLong(transferencia.getOrigem());
+        var sender = usuarioRepository.findById(origemId);
         if (sender.isEmpty()) {
             return "Erro: Usuário pagador não encontrado com ID: " + transferencia.getOrigem();
         }
 
         // Buscar o usuário beneficiário
-        var receiver = usuarioRepository.findById(Long.parseLong(transferencia.getDestino()));
+        Long destinoId = Long.parseLong(transferencia.getDestino());
+        var receiver = usuarioRepository.findById(destinoId);
         if (receiver.isEmpty()) {
             return "Erro: Usuário beneficiário não encontrado com ID: " + transferencia.getDestino();
         }
@@ -46,9 +48,8 @@ public class TransferenciaService {
                 ", ID do beneficiário: " + transferencia.getDestino();
     }
 
-
     @Transactional(readOnly = true)
-    public List<Transferencia> getTransfersByUserId(Long userId) {
+    public List<Transferencia> getTransfersByUserId(String userId) {
         return transferRepository.findAllByOrigemOrDestino(userId, userId);
     }
 }

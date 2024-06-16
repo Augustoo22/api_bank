@@ -9,5 +9,5 @@ import java.util.List;
 @Repository
 public interface TransferenciaRepository extends JpaRepository<Transferencia, Long> {
 
-    List<Transferencia> findAllByOrigemOrDestino(Long origem, Long destino);
+    List<Transferencia> findAllByOrigemOrDestino(String origem, String destino);
 }
