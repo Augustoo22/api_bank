@@ -3,9 +3,13 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "usuarios")
+//'@Entity está dizendo que é uma classe JPA que será mapeada para uma tabela do banco de dados
+//@Table Aqui passa o nome da tabela do banco de dados que será criada ao executar o codigo
 public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //@Id está indicando que será uma chave primaria
+    //@GeneratedValue indica que esse id será gerado automaticamente
     private Long id;
     private String nome;
     private int idade;
@@ -71,3 +75,5 @@ public class Usuario {
         this.cpf = cpf;
     }
 }
+
+//Métodos GET para acessar e metodos SET eles são importantes para que o JPA consiga fazer a manipulação
