@@ -58,15 +58,15 @@ public class UsuarioController {
         UserDetails userDetails = usuarioService.loadUserByUsername(email);
         String jwt = jwtUtil.generateToken(userDetails);
 
-        Optional<Usuario> usuarioOptional = usuarioService.buscarPorEmail(email);
-        if (usuarioOptional.isPresent()) {
-            Usuario usuario = usuarioOptional.get();
+        Optional<Usuario> usuario = usuarioService.buscarPorEmail(email);
+        if (usuario != null) {
             model.addAttribute("jwt", jwt);
-            return "redirect:/usuarios/pagina-inicial/" + usuario.getId() + "?token=" + jwt;
+            return "redirect:/usuarios/pagina-inicial/" + usuario.get().getEmail() + "?token=" + jwt;
         } else {
             return "paginaLogin";
         }
     }
+
 
 
 

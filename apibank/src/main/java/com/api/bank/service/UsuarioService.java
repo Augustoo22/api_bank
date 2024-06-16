@@ -80,14 +80,16 @@ public class UsuarioService implements UserDetailsService {
     // Implementação de UserDetailsService
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Usuario usuario = buscarPorEmail(email).orElseThrow(() ->
-                new UsernameNotFoundException("Usuário não encontrado com email: " + email)
-        );
-        return User.withUsername(usuario.getEmail())
-                .password(usuario.getSenha())
+        Optional<Usuario> usuario = buscarPorEmail(email);
+        if (usuario == null) {
+            throw new UsernameNotFoundException("Usuário não encontrado com email: " + email);
+        }
+        return User.withUsername(usuario.get().getEmail())
+                .password(usuario.get().getSenha())
                 .roles("USER")
                 .build();
     }
+
     // Implementa o método da interface UserDetailsService para carregar os detalhes do usuário pelo email
     // Retorna um objeto do Spring Security que contém as informações do usuário.
 }
