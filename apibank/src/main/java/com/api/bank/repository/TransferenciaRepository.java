@@ -8,6 +8,6 @@ import java.util.List;
 
 @Repository
 public interface TransferenciaRepository extends JpaRepository<Transferencia, Long> {
-
-    List<Transferencia> findAllByOrigemOrDestino(Long origem);
+    List<Transferencia> findAllByOrigem(String origem);
+    List<Transferencia> findAllByDestino(String destino);
 }

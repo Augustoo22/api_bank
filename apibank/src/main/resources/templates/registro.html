@@ -24,8 +24,7 @@
     </nav>
 </div>
 
-
-<div class="historico-transferencias">
+<div class="historico-transferencias" th:if="${transferencias != null}">
     <h3>Histórico de Transferências</h3>
     <table>
         <thead>
@@ -37,9 +36,9 @@
         </thead>
         <tbody>
         <tr th:each="transferencia : ${transferencias}">
-            <td th:text="${transferencia.dataHora}"></td>
+            <td th:text="${transferencia.dataHora != null ? #dates.format(transferencia.dataHora, 'dd/MM/yyyy HH:mm:ss') : ''}"></td>
             <td th:text="${transferencia.valor}"></td>
-            <td th:text="${transferencia.paraQuem}"></td>
+            <td th:text="${transferencia.destino}"></td>
         </tr>
         </tbody>
     </table>
