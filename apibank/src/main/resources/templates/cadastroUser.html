@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Cadastro</title>
-    <link href="../static/css/styleCadastro.css" th:href="@{/css/styleCadastro.css}" rel="stylesheet" />
+    <link th:href="@{/css/styleCadastro.css}" rel="stylesheet" />
 </head>
 <body>
 <header>
@@ -11,7 +11,7 @@
 </header>
 
 <div class="form-container">
-    <form action="#" th:action="@{/salvar}" method="post">
+    <form th:action="@{/usuarios/salvar}" method="post">
         <label for="nome">Nome:</label>
         <input type="text" id="nome" name="nome" required>
 
@@ -26,6 +26,9 @@
 
         <label for="saldo">Saldo:</label>
         <input type="text" id="saldo" name="saldo" required>
+
+        <label for="cpf">CPF:</label>
+        <input type="text" id="cpf" name="cpf" required>
 
         <button type="submit" class="btn btn-primary">Enviar</button>
     </form>
