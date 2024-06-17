@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 public class TransferenciaService {
 
@@ -16,9 +18,6 @@ public class TransferenciaService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
-
-
-
 
     @Transactional
     public String transferirPix(Transferencia transferencia) {
@@ -45,4 +44,11 @@ public class TransferenciaService {
         return "Transferência PIX realizada com sucesso: Valor: " + valorTransferencia +
                 ", da conta de ID: " + pagador.getId() + " para a conta de ID: " + beneficiario.getId();
     }
+
+    @Transactional
+    public List<Transferencia> transferirPix(Long id) {
+        // Implemente a lógica para buscar as transações PIX do usuário com o id fornecido
+        return transferRepository.findAllByOrigemOrDestino(id);
+    }
+
 }
