@@ -11,97 +11,12 @@
     <p class="nomeUsuario">Olá,<span th:text="${bank.nome}"></span></p>
     <button class="Sair">Sair</button>
 </header>
-
 <div class="saldo" th:if="${bank != null}">
     <p>R$ <span th:text="${bank.saldo}"></span></p>
 </div>
-
 <div class="menu">
     <nav>
         <button><a th:href="@{/usuarios/pagina-inicial/{id}(id=${bank.id})}">Inicio</a></button>
         <button><a th:href="@{/usuarios/editar/{id}(id=${bank.id})}">Editar</a></button>
         <button><a th:href="@{/usuarios/registro/{id}(id=${bank.id})}">Registro</a></button>
-    </nav><!DOCTYPE html>
-    <html xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <meta charset="UTF-8">
-        <title>Página Inicial</title>
-        <link href="../static/css/styleTransferencia.css" th:href="@{/css/styleTransferencia.css}" rel="stylesheet" />
-    </head>
-    <body>
-    <header>
-        <h2>VMG</h2>
-        <p class="nomeUsuario">Olá, <span th:text="${bank.nome}"></span></p>
-        <button class="Sair">Sair</button>
-    </header>
-
-    <div class="saldo" th:if="${bank != null}">
-        <p>R$ <span th:text="${bank.saldo}"></span></p>
-    </div>
-
-    <div class="menu">
-        <nav>
-            <button><a th:href="@{/usuarios/pagina-inicial/{id}(id=${bank.id})}">Inicio</a></button>
-            <button><a th:href="@{/usuarios/editar/{id}(id=${bank.id})}">Editar</a></button>
-            <button><a th:href="@{/usuarios/registro/{id}(id=${bank.id})}">Registro</a></button>
-        </nav>
-    </div>
-
-    <div class="formulario-pix">
-        <form th:action="@{/usuarios/enviar-pix}" method="post">
-            <label for="chave-pix">Chave PIX:</label>
-            <input type="text" id="chave-pix" name="chavePix" required>
-
-            <label for="valor">Valor:</label>
-            <input type="number" id="valor" name="valor" required step="0.01">
-
-            <input type="hidden" id="origem" name="origem" th:value="${bank.id}">
-
-            <button type="submit">Enviar</button>
-        </form>
-    </div>
-
-    <div class="lista-pix">
-        <h3>Transações PIX</h3>
-        <table>
-            <thead>
-            <tr>
-                <th>Data</th>
-                <th>Chave</th>
-                <th>Valor</th>
-                <th>Status</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="pix : ${pixList}">
-                <td th:text="${pix.data}"></td>
-                <td th:text="${pix.chavePix}"></td>
-                <td th:text="${pix.valor}"></td>
-                <td th:text="${pix.status}"></td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-
-    </body>
-    </html>
-
-</div>
-
-<div class="formulario-pix">
-    <form th:action="@{/usuarios/enviar-pix}" method="post">
-        <label for="chave-pix">Chave PIX:</label>
-        <input type="text" id="chave-pix" name="chavePix" required>
-
-        <label for="valor">Valor:</label>
-        <input type="number" id="valor" name="valor" required step="0.01">
-
-        <input type="hidden" id="origem" name="origem" th:value="${bank.id}">
-
-        <button type="submit">Enviar</button>
-    </form>
-</div>
-
-
-</body>
-</html>
+    </nav>
