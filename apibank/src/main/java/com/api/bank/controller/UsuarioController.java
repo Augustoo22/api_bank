@@ -32,24 +32,17 @@ public class UsuarioController {
     }
     // Mapeia a requisição GET para a página de login
 
+    @GetMapping("/login")
+    public String loginPage() {
+        return "paginaLogin";
+    }
+
     @PostMapping("/login")
     public String login(@RequestParam("email") String email,
                         @RequestParam("senha") String senha,
-                        RedirectAttributes redirectAttributes,
                         Model model) {
-        try {
-            Usuario usuario = usuarioService.findByEmail(email);
-            if (usuario != null && usuario.getSenha().equals(senha)) {
-                redirectAttributes.addAttribute("id", usuario.getId());
-                return "redirect:/usuarios/pagina-inicial/" + usuario.getId();
-            } else {
-                model.addAttribute("erro", "Usuário ou senha incorretos");
-                return "paginaLogin";
-            }
-        } catch (Exception e) {
-            model.addAttribute("erro", "Erro ao tentar realizar login: " + e.getMessage());
-            return "paginaLogin";
-        }
+        // Este método pode estar vazio, pois o Spring Security gerenciará o processo de autenticação
+        return "redirect:/usuarios/pagina-inicial";
     }
 
     @GetMapping("/cadastro")
@@ -87,8 +80,10 @@ public class UsuarioController {
     @GetMapping("/pix/{id}")
     public ModelAndView paginaPix(@PathVariable("id") Long id, Model model) {
         Usuario usuario = usuarioService.getOneUser(id);
+        List<Pix> pixList = pixService.getPixByUserId(id); // Adiciona a busca das transações PIX
         ModelAndView modelAndView = new ModelAndView("pix.html");
         modelAndView.addObject("bank", usuario);
+        modelAndView.addObject("pixList", pixList); // Adiciona a lista de transações PIX ao modelo
         return modelAndView;
     }
     // Mapeia a requisição GET para a página PIX com base no ID fornecido
@@ -119,23 +114,23 @@ public class UsuarioController {
 
 
 
-
     @GetMapping("/editar/{id}")
     public String editarUsuario(@PathVariable("id") Long id, Model model) {
         Usuario usuario = usuarioService.getOneUser(id);
         model.addAttribute("usuario", usuario);
-        return "editar";
+        return "editar.html";
     }
 
     @PutMapping("/atualizar")
-    public String atualizarUsuario(@ModelAttribute("usuario") Usuario usuario, RedirectAttributes redirectAttributes, Model model) {
+    public ResponseEntity<String> atualizarUsuario(@ModelAttribute("usuario") Usuario usuario, Model model) {
         try {
             Usuario usuarioAtualizado = usuarioService.atualizar(usuario);
-            redirectAttributes.addAttribute("id", usuarioAtualizado.getId());
-            return "redirect:/usuarios/pagina-inicial/" + usuarioAtualizado.getId();
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("Location", "/usuarios/pagina-inicial/" + usuarioAtualizado.getId());
+            return new ResponseEntity<>(headers, HttpStatus.FOUND);
         } catch (Exception e) {
             model.addAttribute("erro", "Erro ao atualizar usuário: " + e.getMessage());
-            return "editar";
+            return new ResponseEntity<>("Erro ao atualizar usuário: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
