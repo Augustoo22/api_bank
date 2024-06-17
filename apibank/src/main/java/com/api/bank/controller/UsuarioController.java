@@ -119,23 +119,23 @@ public class UsuarioController {
 
 
 
+
     @GetMapping("/editar/{id}")
     public String editarUsuario(@PathVariable("id") Long id, Model model) {
         Usuario usuario = usuarioService.getOneUser(id);
         model.addAttribute("usuario", usuario);
-        return "editar.html";
+        return "editar";
     }
 
     @PutMapping("/atualizar")
-    public ResponseEntity<String> atualizarUsuario(@ModelAttribute("usuario") Usuario usuario, Model model) {
+    public String atualizarUsuario(@ModelAttribute("usuario") Usuario usuario, RedirectAttributes redirectAttributes, Model model) {
         try {
             Usuario usuarioAtualizado = usuarioService.atualizar(usuario);
-            HttpHeaders headers = new HttpHeaders();
-            headers.add("Location", "/usuarios/pagina-inicial/" + usuarioAtualizado.getId());
-            return new ResponseEntity<>(headers, HttpStatus.FOUND);
+            redirectAttributes.addAttribute("id", usuarioAtualizado.getId());
+            return "redirect:/usuarios/pagina-inicial/" + usuarioAtualizado.getId();
         } catch (Exception e) {
             model.addAttribute("erro", "Erro ao atualizar usuário: " + e.getMessage());
-            return new ResponseEntity<>("Erro ao atualizar usuário: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return "editar";
         }
     }
 
