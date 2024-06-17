@@ -1,14 +1,10 @@
 package com.api.bank.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.password.PasswordEncoder;
+
 import org.springframework.stereotype.Service;
 import com.api.bank.model.Usuario;
 import com.api.bank.repository.UsuarioRepository;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.HttpStatus;
 
@@ -17,14 +13,16 @@ import java.util.Optional;
 
 @Service
 // @Service indica que é uma classe é um serviço do Spring onde ocorre a lógica da aplicação
-public class UsuarioService implements UserDetailsService {
+public class UsuarioService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
     // Injeta automaticamente a dependência do UsuarioRepository
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    public Optional<Usuario> findById(Long id) {
+        return usuarioRepository.findById(id);
+    }
+
 
     public List<Usuario> listarTodos() {
         return usuarioRepository.findAll();
@@ -32,7 +30,6 @@ public class UsuarioService implements UserDetailsService {
     // Retorna uma lista de todos os usuários do banco de dados chamando através do 'usuarioRepository'
 
     public Usuario salvar(Usuario usuario) {
-        usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
         return usuarioRepository.save(usuario);
     }
     // Salva ou atualiza o usuário no banco de dados através do 'usuarioRepository'
@@ -58,16 +55,9 @@ public class UsuarioService implements UserDetailsService {
         if (!usuarioRepository.existsById(usuario.getId())) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado com ID: " + usuario.getId());
         }
-        usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
         return usuarioRepository.save(usuario);
     }
     // Atualiza o usuário no banco de dados, lança uma exceção se o ID do usuário não for encontrado
-
-    public boolean validarLogin(String email, String senha) {
-        Optional<Usuario> usuario = buscarPorEmail(email);
-        return usuario.isPresent() && passwordEncoder.matches(senha, usuario.get().getSenha());
-    }
-    // Faz a busca por email e senha do usuário, se não encontrado retorna false
 
     public void deletar(Long id) {
         if (!usuarioRepository.existsById(id)) {
@@ -78,18 +68,6 @@ public class UsuarioService implements UserDetailsService {
     // Através do ID ele deleta o usuário, lança uma exceção se o ID não for encontrado
 
     // Implementação de UserDetailsService
-    @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Optional<Usuario> usuario = buscarPorEmail(email);
-        if (!usuario.isPresent()) {
-            throw new UsernameNotFoundException("Usuário não encontrado com email: " + email);
-        }
-        return User.withUsername(usuario.get().getEmail())
-                .password(usuario.get().getSenha())
-                .roles("USER")
-                .build();
-    }
 
-    // Implementa o método da interface UserDetailsService para carregar os detalhes do usuário pelo email
-    // Retorna um objeto do Spring Security que contém as informações do usuário.
+
 }
