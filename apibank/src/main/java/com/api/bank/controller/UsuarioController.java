@@ -2,6 +2,7 @@ package com.api.bank.controller;
 
 import com.api.bank.model.Transferencia;
 import com.api.bank.model.Usuario;
+import com.api.bank.model.dto.TransferenciaDTO;
 import com.api.bank.service.TransferenciaService;
 import com.api.bank.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +17,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
-
 @Controller
 @RequestMapping("/usuarios")
-// Define a classe como um controller e mapeia todas as URLs para iniciar com /usuarios
 public class UsuarioController {
 
     @Autowired
@@ -32,7 +31,6 @@ public class UsuarioController {
     public String login() {
         return "paginaLogin";
     }
-    // Mapeia a requisição GET para a página de login
 
     @PostMapping("/login")
     public String login(@RequestParam("email") String email,
@@ -59,15 +57,12 @@ public class UsuarioController {
         model.addAttribute("usuario", new Usuario());
         return "cadastroUser";
     }
-    // Mapeia a requisição GET para a página de cadastro e adiciona um objeto usuário vazio ao modelo
 
     @PostMapping("/salvar")
     public String salvar(@ModelAttribute("usuario") Usuario usuario) {
         usuarioService.salvar(usuario);
         return "redirect:/usuarios";
     }
-    // Mapeia a requisição POST para salvar um usuário e redireciona para a página inicial
-
 
     @GetMapping("/pagina-inicial/{id}")
     public String paginaInicial(@PathVariable("id") Long id, Model model) {
@@ -75,18 +70,19 @@ public class UsuarioController {
         model.addAttribute("bank", usuario);
         return "pagina_inicial";
     }
-    // Mapeia a requisição GET para a página inicial do usuário com base no ID fornecido
 
     @GetMapping("/registro/{id}")
-    public ModelAndView paginaRegistro(@PathVariable("id") Long id, Model model) {
+    public ModelAndView mostrarPaginaRegistro(@PathVariable("id") Long id) {
         Usuario usuario = usuarioService.getOneUser(id);
-        ModelAndView modelAndView = new ModelAndView("registro.html");
+        List<TransferenciaDTO> transferencias = transferenciaService.getTransferenciasByUser(usuario.getId().toString());
+
+        ModelAndView modelAndView = new ModelAndView("registro");
         modelAndView.addObject("bank", usuario);
+        modelAndView.addObject("transferencias", transferencias);
         return modelAndView;
     }
-    // Mapeia a requisição GET para a página de registro com base no ID fornecido
 
-  @GetMapping("/pix/{id}")
+    @GetMapping("/pix/{id}")
     public ModelAndView paginaPix(@PathVariable("id") Long id, Model model) {
         Usuario usuario = usuarioService.getOneUser(id);
         ModelAndView modelAndView = new ModelAndView("pix.html");
@@ -119,13 +115,11 @@ public class UsuarioController {
         return "redirect:/usuarios/pagina-inicial/" + usuario.getId();
     }
 
-
-
     @GetMapping("/editar/{id}")
     public String editarUsuario(@PathVariable("id") Long id, Model model) {
         Usuario usuario = usuarioService.getOneUser(id);
         model.addAttribute("usuario", usuario);
-        return "editar.html";
+        return "editar";
     }
 
     @PutMapping("/atualizar")
@@ -140,7 +134,4 @@ public class UsuarioController {
             return new ResponseEntity<>("Erro ao atualizar usuário: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-
-    // Mapeia a requisição POST para atualizar um usuário e trata as exceções de forma adequada
 }
