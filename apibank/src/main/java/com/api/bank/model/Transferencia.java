@@ -1,4 +1,5 @@
 package com.api.bank.model;
+
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
