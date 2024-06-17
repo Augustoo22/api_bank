@@ -1,20 +1,19 @@
 package com.api.bank.controller;
 
+import com.api.bank.model.Transferencia;
 import com.api.bank.model.Usuario;
+import com.api.bank.service.TransferenciaService;
 import com.api.bank.service.UsuarioService;
-import com.api.bank.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/usuarios")
@@ -25,7 +24,7 @@ public class UsuarioController {
     private UsuarioService usuarioService;
 
     @Autowired
-    private JwtUtil jwtUtil;
+    private TransferenciaService transferenciaService;
 
     @GetMapping("")
     public String login() {
@@ -47,30 +46,6 @@ public class UsuarioController {
     }
     // Mapeia a requisição POST para salvar um usuário e redireciona para a página inicial
 
-    @PostMapping("/login")
-    public String createAuthenticationToken(@RequestParam String email, @RequestParam String senha, Model model) {
-        boolean loginValido = usuarioService.validarLogin(email, senha);
-        if (!loginValido) {
-            model.addAttribute("erro", "Usuário ou senha inválidos");
-            return "paginaLogin";
-        }
-
-        UserDetails userDetails = usuarioService.loadUserByUsername(email);
-        String jwt = jwtUtil.generateToken(userDetails);
-
-        Optional<Usuario> usuario = usuarioService.buscarPorEmail(email);
-        if (usuario != null) {
-            model.addAttribute("jwt", jwt);
-            return "redirect:/usuarios/pagina-inicial/" + usuario.get().getEmail() + "?token=" + jwt;
-        } else {
-            return "paginaLogin";
-        }
-    }
-
-
-
-
-    // Mapeia a requisição POST para autenticar um usuário e redireciona para a página inicial com um token JWT
 
     @GetMapping("/pagina-inicial/{id}")
     public String paginaInicial(@PathVariable("id") Long id, Model model) {
@@ -98,6 +73,32 @@ public class UsuarioController {
     }
     // Mapeia a requisição GET para a página PIX com base no ID fornecido
 
+    @PostMapping("/enviar-pix")
+    public String enviarPix(@RequestParam("chavePix") String chavePix,
+                            @RequestParam("valor") double valor,
+                            @RequestParam("origem") Long origemId,
+                            RedirectAttributes redirectAttributes) {
+        Usuario usuario = usuarioService.findById(origemId)
+                .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado com ID: " + origemId));
+
+        Transferencia transferencia = new Transferencia();
+        transferencia.setOrigem(usuario.getId().toString());
+        transferencia.setDestino(chavePix);
+        transferencia.setValor(valor);
+
+        String resultadoTransferencia = transferenciaService.transferirPix(transferencia);
+
+        if (resultadoTransferencia.startsWith("Erro")) {
+            redirectAttributes.addFlashAttribute("error", resultadoTransferencia);
+        } else {
+            redirectAttributes.addFlashAttribute("success", resultadoTransferencia);
+        }
+
+        return "redirect:/usuarios/pagina-inicial/" + usuario.getId();
+    }
+
+
+
     @GetMapping("/editar/{id}")
     public String editarUsuario(@PathVariable("id") Long id, Model model) {
         Usuario usuario = usuarioService.getOneUser(id);
@@ -106,21 +107,20 @@ public class UsuarioController {
     }
     // Mapeia a requisição GET para a página de edição de usuário com base no ID fornecido
 
+
     @PostMapping("/atualizar")
     public ResponseEntity<String> atualizarUsuario(@ModelAttribute("usuario") Usuario usuario, Model model) {
         try {
-            usuarioService.atualizar(usuario);
+            usuarioService.salvar(usuario);
             HttpHeaders headers = new HttpHeaders();
             headers.add("Location", "/usuarios/pagina-inicial/" + usuario.getId());
             return new ResponseEntity<>(headers, HttpStatus.FOUND);
-        } catch (ResponseStatusException e) {
-            model.addAttribute("erro", e.getReason());
-            return new ResponseEntity<>("Erro ao atualizar usuário: " + e.getReason(), e.getStatusCode());
         } catch (Exception e) {
             model.addAttribute("erro", "Erro ao atualizar usuário: " + e.getMessage());
             return new ResponseEntity<>("Erro ao atualizar usuário: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+
     // Mapeia a requisição POST para atualizar um usuário e trata as exceções de forma adequada
 }
-
