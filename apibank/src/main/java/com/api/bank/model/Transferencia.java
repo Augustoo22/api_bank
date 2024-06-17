@@ -4,9 +4,13 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+//'@Entity está dizendo que é uma classe JPA que será mapeada para uma tabela do banco de dados
+
 public class Transferencia {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //@Id está indicando que será uma chave primaria
+    //@GeneratedValue indica que esse id será gerado automaticamente
     private Long id;
     private String origem;
     private String destino;

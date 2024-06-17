@@ -32,24 +32,17 @@ public class UsuarioController {
     }
     // Mapeia a requisição GET para a página de login
 
+    @GetMapping("/login")
+    public String loginPage() {
+        return "paginaLogin";
+    }
+
     @PostMapping("/login")
     public String login(@RequestParam("email") String email,
                         @RequestParam("senha") String senha,
-                        RedirectAttributes redirectAttributes,
                         Model model) {
-        try {
-            Usuario usuario = usuarioService.findByEmail(email);
-            if (usuario != null && usuario.getSenha().equals(senha)) {
-                redirectAttributes.addAttribute("id", usuario.getId());
-                return "redirect:/usuarios/pagina-inicial/" + usuario.getId();
-            } else {
-                model.addAttribute("erro", "Usuário ou senha incorretos");
-                return "paginaLogin";
-            }
-        } catch (Exception e) {
-            model.addAttribute("erro", "Erro ao tentar realizar login: " + e.getMessage());
-            return "paginaLogin";
-        }
+        // Este método pode estar vazio, pois o Spring Security gerenciará o processo de autenticação
+        return "redirect:/usuarios/pagina-inicial";
     }
 
     @GetMapping("/cadastro")
