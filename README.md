@@ -74,39 +74,42 @@ O padrão Repository será utilizado para a camada de acesso a dados, abstraindo
 
 ### Lista detalhada de funcionalidades do sistema
 - Cadastro de novos usuários.
-- Deletar usuários
+- Deletar usuários.
 - Login e autenticação de usuários.
 - Consulta de saldo.
-- Depósito em conta.
-- Saque de conta.
 - Transferência entre contas.
 - Geração e consulta de extratos de transações.
 - Atualização de informações de perfil do usuário.
 
-### Casos de uso principais
-1. **Cadastro de Usuário:**
-  - Usuário fornece nome, idade, e informações de contato.
-  - Sistema cria uma nova conta e retorna detalhes da conta.
+### Lista detalhada de funcionalidades do sistema com endpoints
 
-2. **Login de Usuário:**
-  - Usuário fornece credenciais (e-mail e senha).
-  - Sistema autentica e retorna token de acesso.
+1. **Cadastro de Usuário**
+   - **Endpoint:** `POST /api/users`
+   - **Descrição:** Criação de um novo usuário.
 
-3. **Depósito em Conta:**
-  - Usuário fornece detalhes da conta e valor do depósito.
-  - Sistema atualiza saldo e registra transação.
+2. **Deletar Usuário**
+   - **Endpoint:** `DELETE /api/users/{id}`
+   - **Descrição:** Deletar um usuário existente.
 
-4. **Saque de Conta:**
-  - Usuário fornece detalhes da conta e valor do saque.
-  - Sistema verifica saldo, atualiza e registra transação.
+3. **Login de Usuário**
+   - **Endpoint:** `POST /api/auth/login`
+   - **Descrição:** Autenticação de um usuário e geração de token de acesso.
 
-5. **Transferência entre Contas:**
-  - Usuário fornece contas de origem e destino, e valor da transferência.
-  - Sistema verifica saldos, atualiza ambos e registra transação.
+4. **Consulta de Saldo**
+   - **Endpoint:** `GET /api/accounts/{id}/balance`
+   - **Descrição:** Consultar o saldo da conta do usuário.
 
-6. **Consulta de Extrato:**
-  - Usuário solicita extrato de transações.
-  - Sistema retorna histórico de transações para o período especificado.
+5. **Transferência entre Contas**
+   - **Endpoint:** `POST /api/accounts/transfer`
+   - **Descrição:** Transferir valores entre contas de usuários.
+
+6. **Consulta de Extrato**
+   - **Endpoint:** `GET /api/accounts/{id}/transactions`
+   - **Descrição:** Consultar o histórico de transações da conta do usuário.
+
+7. **Atualização de Informações de Perfil do Usuário**
+   - **Endpoint:** `PUT /api/users/{id}`
+   - **Descrição:** Atualizar informações de perfil do usuário.
 
 ### Fluxos de trabalho do usuário
 - **Cadastro e Login:** Usuário se cadastra, faz login e recebe token de acesso.
@@ -116,11 +119,12 @@ O padrão Repository será utilizado para a camada de acesso a dados, abstraindo
 ## 5. Requisitos Não Funcionais
 
 ### Desempenho esperado do sistema
-- Respostas a operações comuns (como consulta de saldo)
+- Respostas a operações comuns (como consulta de saldo, depósitos e transferências) devem ser rápidas e eficientes, com tempo de resposta inferior a 1 segundo na maioria dos casos.
 
 ### Segurança e autenticação
 - Uso de Spring Security para autenticação e autorização.
-- Proteção contra ataques comuns (SQL Injection).
+- Proteção contra ataques comuns (SQL Injection, XSS, CSRF).
+- Armazenamento seguro de senhas usando hashing (BCrypt).
 
 ### Escalabilidade e manutenibilidade
 - Arquitetura modular para facilitar a expansão de funcionalidades.
@@ -134,10 +138,10 @@ O padrão Repository será utilizado para a camada de acesso a dados, abstraindo
 
 ### Frameworks
 - Spring Boot (Java)
-
+- Spring Security para autenticação e autorização.
 
 ### Bancos de dados
-- PostgresSql
+- PostgreSQL
 
 ### Ferramentas de desenvolvimento
 - Git para controle de versão.
@@ -153,7 +157,7 @@ O padrão Repository será utilizado para a camada de acesso a dados, abstraindo
 - Usuário possui muitas Transações.
 
 ### Esquema de armazenamento
-- Utilização de banco de dados relacional (PostgresSql).
+- Utilização de banco de dados relacional (PostgreSQL).
 
 ## 8. Interfaces do Usuário
 
@@ -161,10 +165,10 @@ O padrão Repository será utilizado para a camada de acesso a dados, abstraindo
 - Interface web simples e intuitiva para gerenciar contas e realizar transações.
 
 ### Funcionalidades específicas de cada tela
-- Tela de login: Entrada de credenciais.
-- Tela de cadastro: Formulário de registro.
-- Dashboard: Visão geral do saldo e opções de transações.
-- Tela de transações: Formulário para depósitos, saques e transferências.
+- **Tela de login:** Entrada de credenciais.
+- **Tela de cadastro:** Formulário de registro.
+- **Dashboard:** Visão geral do saldo e opções de transações.
+- **Tela de transações:** Formulário para depósitos, saques e transferências.
 
 ### Fluxos de interação do usuário
 - Login -> Dashboard -> Realização de transações -> Consulta de extrato.
@@ -186,15 +190,16 @@ O padrão Repository será utilizado para a camada de acesso a dados, abstraindo
 ## 10. Planejamento de Implantação
 
 ### Ambientes de implantação
-- Desenvolvimento (develop)
-- Teste (feature)
-- Produção (main)
+- **Desenvolvimento:** Ambiente para desenvolvimento de novas funcionalidades.
+- **Teste:** Ambiente para testes das funcionalidades desenvolvidas.
+- **Produção:** Ambiente final utilizado pelos usuários.
 
 ### Procedimentos de implantação
 - Uso de CI/CD para integração e entrega contínua.
+- Deploy automatizado usando ferramentas como Jenkins ou GitHub Actions.
 
 ### Migração de dados, se necessário
-- Scripts de migração para atualizar esquemas de banco de dados.
+- Scripts de migração para configuração inicial do banco de dados.
 
 ## 11. Gestão de Configuração e Controle de Versão
 
@@ -208,7 +213,6 @@ O padrão Repository será utilizado para a camada de acesso a dados, abstraindo
 - Git para versionamento.
 - GitHub para hospedagem de repositório.
 
-
 ## 12. Considerações de Segurança
 
 ### Mecanismos de autenticação e autorização
@@ -216,19 +220,24 @@ O padrão Repository será utilizado para a camada de acesso a dados, abstraindo
 
 ### Proteção contra vulnerabilidades conhecidas
 - Validação de entrada para prevenir SQL Injection.
-
+- Proteção contra XSS e CSRF.
+- Armazenamento seguro de senhas com hashing (BCrypt).
 
 ## 13. Considerações de Manutenção
 
 ### Planos de suporte pós-implantação
-- Equipe de suporte disponível para resolver problemas pós-implantação.
+- Suporte via email.
+- Base de conhecimento online.
 
 ### Processo de correção de bugs e implementação de melhorias
-- Releases regulares para implementar melhorias.
+- Releases regulares para implementar melhorias e corrigir bugs.
+- Monitoramento contínuo do sistema para
+
+ identificar e resolver problemas rapidamente.
 
 ### Atualizações de segurança e de software
-- Monitoramento contínuo para identificar vulnerabilidades.
 - Atualizações periódicas para manter a segurança e funcionalidade do sistema.
+- Patches de segurança aplicados conforme necessário.
 
 ### Responsáveis pelo projeto
 - Victor Augusto
