@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
+
 
 @Controller
 @RequestMapping("/usuarios")
@@ -84,7 +86,7 @@ public class UsuarioController {
     }
     // Mapeia a requisição GET para a página de registro com base no ID fornecido
 
-    @GetMapping("/pix/{id}")
+  @GetMapping("/pix/{id}")
     public ModelAndView paginaPix(@PathVariable("id") Long id, Model model) {
         Usuario usuario = usuarioService.getOneUser(id);
         ModelAndView modelAndView = new ModelAndView("pix.html");
