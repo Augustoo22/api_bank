@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link th:href="@{/css/styleLogin.css}" rel="stylesheet" />
+</head>
+<body>
+<header>
+    <h2>VMG</h2>
+</header>
+
+<div class="form-container">
+    <form th:action="@{/usuarios/login}" method="post">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+
+        <label for="senha">Senha:</label>
+        <input type="password" id="senha" name="senha" required>
+
+        <button type="submit" class="btn btn-primary">Entrar</button>
+    </form>
+    <a th:href="@{/usuarios/cadastro}">Criar uma conta</a>
+    <div th:if="${erro}" class="error">
+        <p th:text="${erro}"></p>
+    </div>
+</div>
+
+</body>
+</html>
