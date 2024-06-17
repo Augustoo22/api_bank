@@ -18,19 +18,21 @@
 
 <div class="menu">
     <nav>
-        <button><a th:href="@{/usuarios/pagina_inicial/{id}(id=${bank.id})}">Inicio</a></button>
+        <button><a th:href="@{/usuarios/pagina-inicial/{id}(id=${bank.id})}">Inicio</a></button>
         <button><a th:href="@{/usuarios/editar/{id}(id=${bank.id})}">Editar</a></button>
         <button><a th:href="@{/usuarios/registro/{id}(id=${bank.id})}">Registro</a></button>
     </nav>
 </div>
 
 <div class="formulario-pix">
-    <form action="#" method="post">
+    <form th:action="@{/usuarios/enviar-pix}" method="post">
         <label for="chave-pix">Chave PIX:</label>
-        <input type="text" id="chave-pix" name="chave-pix" required>
+        <input type="text" id="chave-pix" name="chavePix" required>
 
         <label for="valor">Valor:</label>
         <input type="number" id="valor" name="valor" required step="0.01">
+
+        <input type="hidden" id="origem" name="origem" th:value="${bank.id}">
 
         <button type="submit">Enviar</button>
     </form>
