@@ -21,9 +21,7 @@
         <button type="submit" class="btn btn-primary">Entrar</button>
     </form>
     <a th:href="@{/usuarios/cadastro}">Criar uma conta</a>
-    <div th:if="${erro}" class="error">
-        <p th:text="${erro}"></p>
-    </div>
+    <span th:if="${param.error}" class="error">Usuário ou senha incorretos.</span>
 </div>
 
 </body>

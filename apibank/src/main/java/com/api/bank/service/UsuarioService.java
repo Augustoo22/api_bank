@@ -1,7 +1,14 @@
 package com.api.bank.service;
 
+import com.api.bank.model.dto.UserLogin;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.api.bank.model.Usuario;
 import com.api.bank.repository.UsuarioRepository;
@@ -10,14 +17,18 @@ import org.springframework.http.HttpStatus;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 // @Service indica que é uma classe é um serviço do Spring onde ocorre a lógica da aplicação
-public class UsuarioService {
+public class UsuarioService{
 
     @Autowired
     private UsuarioRepository usuarioRepository;
     // Injeta automaticamente a dependência do UsuarioRepository
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public Optional<Usuario> findById(Long id) {
         return usuarioRepository.findById(id);
@@ -74,6 +85,11 @@ public class UsuarioService {
     // Através do ID ele deleta o usuário, lança uma exceção se o ID não for encontrado
 
     // Implementação de UserDetailsService
-
-
+    public Optional<Usuario> authenticate(String email, String senha) {
+        Optional<Usuario> usuario = usuarioRepository.findByEmail(email);
+        if (usuario.isPresent() && passwordEncoder.matches(senha, usuario.get().getSenha())) {
+            return usuario;
+        }
+        return Optional.empty();
+    }
 }

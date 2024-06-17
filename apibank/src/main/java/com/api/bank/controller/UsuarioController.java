@@ -16,6 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/usuarios")
@@ -37,17 +38,12 @@ public class UsuarioController {
                         @RequestParam("senha") String senha,
                         RedirectAttributes redirectAttributes,
                         Model model) {
-        try {
-            Usuario usuario = usuarioService.findByEmail(email);
-            if (usuario != null && usuario.getSenha().equals(senha)) {
-                redirectAttributes.addAttribute("id", usuario.getId());
-                return "redirect:/usuarios/pagina-inicial/" + usuario.getId();
-            } else {
-                model.addAttribute("erro", "Usuário ou senha incorretos");
-                return "paginaLogin";
-            }
-        } catch (Exception e) {
-            model.addAttribute("erro", "Erro ao tentar realizar login: " + e.getMessage());
+        Optional<Usuario> usuario = usuarioService.authenticate(email, senha);
+        if (usuario.isPresent()) {
+            redirectAttributes.addAttribute("id", usuario.get().getId());
+            return "redirect:/usuarios/pagina-inicial/" + usuario.get().getId();
+        } else {
+            model.addAttribute("erro", "Usuário ou senha incorretos");
             return "paginaLogin";
         }
     }
