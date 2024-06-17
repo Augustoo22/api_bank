@@ -17,6 +17,9 @@ public class TransferenciaService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+
+
+
     @Transactional
     public String transferirPix(Transferencia transferencia) {
         // Verifica se o usuário pagador existe e tem saldo suficiente

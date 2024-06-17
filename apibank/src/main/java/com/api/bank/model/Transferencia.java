@@ -1,6 +1,8 @@
 package com.api.bank.model;
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 public class Transferencia {
     @Id
@@ -9,6 +11,7 @@ public class Transferencia {
     private String origem;
     private String destino;
     private double valor;
+    private LocalDateTime dataHora;
 
     public Long getId() {
         return id;
@@ -40,6 +43,14 @@ public class Transferencia {
 
     public void setValor(double valor) {
         this.valor = valor;
+    }
+
+    public LocalDateTime getDataHora() {
+        return dataHora;
+    }
+
+    public void setDataHora(LocalDateTime dataHora) {
+        this.dataHora = dataHora;
     }
 
 }
