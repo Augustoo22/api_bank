@@ -46,6 +46,11 @@ public class UsuarioService {
     }
     // Retorna um único usuário pelo ID, lança uma exceção se não encontrado
 
+    public Usuario findByEmail(String email) {
+        return usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado com email: " + email));
+    }
+
     public Optional<Usuario> buscarPorEmail(String email) {
         return usuarioRepository.findByEmail(email);
     }
@@ -57,6 +62,7 @@ public class UsuarioService {
         }
         return usuarioRepository.save(usuario);
     }
+
     // Atualiza o usuário no banco de dados, lança uma exceção se o ID do usuário não for encontrado
 
     public void deletar(Long id) {

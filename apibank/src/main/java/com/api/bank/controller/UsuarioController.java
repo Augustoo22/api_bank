@@ -32,6 +32,26 @@ public class UsuarioController {
     }
     // Mapeia a requisição GET para a página de login
 
+    @PostMapping("/login")
+    public String login(@RequestParam("email") String email,
+                        @RequestParam("senha") String senha,
+                        RedirectAttributes redirectAttributes,
+                        Model model) {
+        try {
+            Usuario usuario = usuarioService.findByEmail(email);
+            if (usuario != null && usuario.getSenha().equals(senha)) {
+                redirectAttributes.addAttribute("id", usuario.getId());
+                return "redirect:/usuarios/pagina-inicial/" + usuario.getId();
+            } else {
+                model.addAttribute("erro", "Usuário ou senha incorretos");
+                return "paginaLogin";
+            }
+        } catch (Exception e) {
+            model.addAttribute("erro", "Erro ao tentar realizar login: " + e.getMessage());
+            return "paginaLogin";
+        }
+    }
+
     @GetMapping("/cadastro")
     public String cadastroForm(Model model) {
         model.addAttribute("usuario", new Usuario());
@@ -105,15 +125,13 @@ public class UsuarioController {
         model.addAttribute("usuario", usuario);
         return "editar.html";
     }
-    // Mapeia a requisição GET para a página de edição de usuário com base no ID fornecido
 
-
-    @PostMapping("/atualizar")
+    @PutMapping("/atualizar")
     public ResponseEntity<String> atualizarUsuario(@ModelAttribute("usuario") Usuario usuario, Model model) {
         try {
-            usuarioService.salvar(usuario);
+            Usuario usuarioAtualizado = usuarioService.atualizar(usuario);
             HttpHeaders headers = new HttpHeaders();
-            headers.add("Location", "/usuarios/pagina-inicial/" + usuario.getId());
+            headers.add("Location", "/usuarios/pagina-inicial/" + usuarioAtualizado.getId());
             return new ResponseEntity<>(headers, HttpStatus.FOUND);
         } catch (Exception e) {
             model.addAttribute("erro", "Erro ao atualizar usuário: " + e.getMessage());

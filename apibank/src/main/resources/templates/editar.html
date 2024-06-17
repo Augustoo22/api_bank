@@ -2,16 +2,19 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Cadastro</title>
+    <title>Editar Usuário</title>
     <link th:href="@{/css/styleEditar.css}" rel="stylesheet" />
 </head>
 <body>
 <header>
-    <h2>VMG</h2>
+    <h2>Editar Usuário</h2>
 </header>
 
 <div class="form-container">
     <form th:action="@{/usuarios/atualizar}" method="post" th:object="${usuario}">
+        <input type="hidden" name="_method" value="put"/>
+        <input type="hidden" th:field="*{id}" />
+
         <label for="nome">Nome:</label>
         <input type="text" id="nome" name="nome" th:value="*{nome}" required>
 
