@@ -80,8 +80,10 @@ public class UsuarioController {
     @GetMapping("/pix/{id}")
     public ModelAndView paginaPix(@PathVariable("id") Long id, Model model) {
         Usuario usuario = usuarioService.getOneUser(id);
+        List<Pix> pixList = pixService.getPixByUserId(id); // Adiciona a busca das transações PIX
         ModelAndView modelAndView = new ModelAndView("pix.html");
         modelAndView.addObject("bank", usuario);
+        modelAndView.addObject("pixList", pixList); // Adiciona a lista de transações PIX ao modelo
         return modelAndView;
     }
     // Mapeia a requisição GET para a página PIX com base no ID fornecido
