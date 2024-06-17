@@ -208,20 +208,8 @@ O padrão Repository será utilizado para a camada de acesso a dados, abstraindo
 - Git para versionamento.
 - GitHub para hospedagem de repositório.
 
-## 12. Gestão de Projetos
 
-### Cronograma de desenvolvimento
-- Entregas ao final de cada 3 dias.
-
-### Atribuição de tarefas e responsabilidades
-- Backlog Github.
-
-### Monitoramento do progresso do projeto
-- Reuniões diárias.
-
-
-
-## 13. Considerações de Segurança
+## 12. Considerações de Segurança
 
 ### Mecanismos de autenticação e autorização
 - Implementação de Spring Security.
@@ -230,10 +218,7 @@ O padrão Repository será utilizado para a camada de acesso a dados, abstraindo
 - Validação de entrada para prevenir SQL Injection.
 
 
-### Auditoria e registro de atividades sensíveis
-- Logs de auditoria detalhados para todas as operações críticas.
-
-## 14. Considerações de Manutenção
+## 13. Considerações de Manutenção
 
 ### Planos de suporte pós-implantação
 - Equipe de suporte disponível para resolver problemas pós-implantação.
