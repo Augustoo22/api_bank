@@ -4,8 +4,17 @@ import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
+/**
+ * Classe que representa a entidade Transferencia no sistema.
+ *
+ * A entidade é mapeada para uma tabela no banco de dados e armazena informações sobre transferências
+ */
+
+//@Entity está dizendo que é uma classe JPA que será mapeada para uma tabela do banco de dados
 @Entity
 public class Transferencia {
+    //@Id está indicando que será uma chave primaria
+    //@GeneratedValue indica que esse id será gerado automaticamente
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -14,6 +23,8 @@ public class Transferencia {
     private double valor;
     private LocalDateTime dataHora;
 
+    // Getters e Setters
+    // Métodos GET para acessar e metodos SET eles são importantes para que o JPA consiga fazer a manipulação
     public Long getId() {
         return id;
     }

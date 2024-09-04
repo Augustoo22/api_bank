@@ -17,6 +17,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
+/**
+ * O `UsuarioController` é responsável por gerenciar as interações do usuário com a aplicação
+ * através de páginas da web. Ele lida com operações relacionadas a usuários, login, transferências Pix,
+ * visualização de registros e edição de informações do usuário.
+ */
 @Controller
 @RequestMapping("/usuarios")
 public class UsuarioController {
@@ -27,6 +32,9 @@ public class UsuarioController {
     @Autowired
     private TransferenciaService transferenciaService;
 
+    /**
+     * Exibe a página de login.
+     */
     @GetMapping("")
     public String login() {
         return "paginaLogin";
@@ -52,18 +60,27 @@ public class UsuarioController {
         }
     }
 
+    /**
+     * Exibe o formulário de cadastro de usuário.
+     */
     @GetMapping("/cadastro")
     public String cadastroForm(Model model) {
         model.addAttribute("usuario", new Usuario());
         return "cadastroUser";
     }
 
+    /**
+     * Salva um novo usuário.
+     */
     @PostMapping("/salvar")
     public String salvar(@ModelAttribute("usuario") Usuario usuario) {
         usuarioService.salvar(usuario);
         return "redirect:/usuarios";
     }
 
+    /**
+     * Exibe a página inicial do usuário autenticado.
+     */
     @GetMapping("/pagina-inicial/{id}")
     public String paginaInicial(@PathVariable("id") Long id, Model model) {
         Usuario usuario = usuarioService.getOneUser(id);
@@ -71,6 +88,9 @@ public class UsuarioController {
         return "pagina_inicial";
     }
 
+    /**
+     * Exibe a página de registros de transferências do usuário.
+     */
     @GetMapping("/registro/{id}")
     public ModelAndView mostrarPaginaRegistro(@PathVariable("id") Long id) {
         Usuario usuario = usuarioService.getOneUser(id);
@@ -82,6 +102,9 @@ public class UsuarioController {
         return modelAndView;
     }
 
+    /**
+     * Exibe a página de transferência Pix.
+     */
     @GetMapping("/pix/{id}")
     public ModelAndView paginaPix(@PathVariable("id") Long id, Model model) {
         Usuario usuario = usuarioService.getOneUser(id);
@@ -89,8 +112,10 @@ public class UsuarioController {
         modelAndView.addObject("bank", usuario);
         return modelAndView;
     }
-    // Mapeia a requisição GET para a página PIX com base no ID fornecido
 
+     /**
+     * Processa a transferência via Pix.
+     */
     @PostMapping("/enviar-pix")
     public String enviarPix(@RequestParam("chavePix") String chavePix,
                             @RequestParam("valor") double valor,
@@ -115,6 +140,9 @@ public class UsuarioController {
         return "redirect:/usuarios/pagina-inicial/" + usuario.getId();
     }
 
+    /**
+     * Exibe o formulário de edição de usuário.
+     */
     @GetMapping("/editar/{id}")
     public String editarUsuario(@PathVariable("id") Long id, Model model) {
         Usuario usuario = usuarioService.getOneUser(id);
@@ -122,6 +150,9 @@ public class UsuarioController {
         return "editar";
     }
 
+    /**
+     * Atualiza as informações do usuário.
+     */
     @PutMapping("/atualizar")
     public ResponseEntity<String> atualizarUsuario(@ModelAttribute("usuario") Usuario usuario, Model model) {
         try {

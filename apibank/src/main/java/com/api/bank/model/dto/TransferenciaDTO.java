@@ -4,6 +4,13 @@ import com.api.bank.model.Transferencia;
 
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Data Transfer Object (DTO) utilizado para transferir os dados da entidade Transferencia
+ * de maneira segura e simplificada entre diferentes camadas do sistema.
+ *
+ * O TransferenciaDTO encapsula as informações de uma transferência e converte a data/hora
+ * para uma representação de string formatada.
+ */
 public class TransferenciaDTO {
     private Long id;
     private String origem;
@@ -11,6 +18,12 @@ public class TransferenciaDTO {
     private double valor;
     private String dataHora;
 
+/**
+ * Construtor que recebe uma entidade Transferencia e inicializa os atributos do DTO
+ * com base nos valores da entidade.
+ *
+ * A data/hora é formatada no padrão "dd/MM/yyyy HH:mm:ss" se estiver presente.
+ */
     public TransferenciaDTO(Transferencia transferencia) {
         this.id = transferencia.getId();
         this.origem = transferencia.getOrigem();
@@ -21,6 +34,7 @@ public class TransferenciaDTO {
         }
     }
 
+    // Métodos getters e setters
     public Long getId() {
         return id;
     }

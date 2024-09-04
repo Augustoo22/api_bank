@@ -13,16 +13,27 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Serviço responsável por lidar com a lógica de transferência PIX e recuperar transferências associadas a um usuário.
+ * Esta classe gerencia as operações envolvendo as entidades Transferencia e Usuario.
+ */
 @Service
 public class TransferenciaService {
 
+    // Repositório para manipular as transferências.
     @Autowired
     private TransferenciaRepository transferenciaRepository;
 
+    // Repositório para manipular os usuários.
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    @Transactional
+/**
+ * Método responsável por realizar uma transferência PIX entre dois usuários.
+ * Verifica se o pagador tem saldo suficiente e, se válido, debita o valor da conta do pagador
+ * e credita o valor na conta do beneficiário.
+ */
+ @Transactional
     public String transferirPix(Transferencia transferencia) {
         Usuario pagador = usuarioRepository.findById(Long.parseLong(transferencia.getOrigem()))
                 .orElseThrow(() -> new IllegalArgumentException("Usuário pagador não encontrado com ID: " + transferencia.getOrigem()));
@@ -45,7 +56,10 @@ public class TransferenciaService {
                 ", da conta de ID: " + pagador.getId() + " para a conta de ID: " + beneficiario.getId();
     }
 
-    @Transactional
+/**
+ * Busca todas as transferências (origem e destino) associadas a um usuário.
+ */
+ @Transactional
     public List<TransferenciaDTO> getTransferenciasByUser(String userId) {
         List<Transferencia> transferenciasOrigem = transferenciaRepository.findAllByOrigem(userId);
         List<Transferencia> transferenciasDestino = transferenciaRepository.findAllByDestino(userId);
